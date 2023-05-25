@@ -10,7 +10,7 @@ interface InputProps {
   outerContainerClassName?: string
   labelClassName?: string
   inputClassName?: string
-  field: any
+  field?: any
 }
 interface BorderStyle {
   static: string

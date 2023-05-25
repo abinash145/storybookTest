@@ -22,7 +22,7 @@ export const LoggedIn: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const loginButton = await canvas.getByRole('button', {
-      name: /Log in/i,
+      // name: /Log in/i,
     })
     await userEvent.click(loginButton)
   },

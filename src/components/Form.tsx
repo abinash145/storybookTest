@@ -1,58 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import Input from './Input'
+import Button from './Button'
+import { useForm, Controller } from 'react-hook-form'
 interface FormData {
-      name: string;
-  email: string;
+  name: string
+  email: string
 }
 interface FormProps {
-  onSubmit: (data: FormData) => void;
+  onSubmit: (data: FormData) => void
 }
-
-const Form: React.FC<FormProps> = ({ onSubmit }) => {
+type Inputs = {
+  email: string
+  password: string
+}
+const Form: React.FC<FormProps> = () => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
-  });
+  })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    watch,
+  } = useForm<Inputs>()
+  const submit = (data: Inputs) => console.log(data)
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-          />
-        </label>
+    <form onSubmit={handleSubmit(submit)}>
+      <div className="mb-4">
+        <Controller
+          control={control}
+          name="email"
+          rules={{
+            required: 'This field is required',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'Invalid email address',
+            },
+          }}
+          defaultValue=""
+          render={({ field }) => (
+            <Input
+              label="email"
+              placeholder="Please Enter your email"
+              type="email"
+              variant="static"
+              name="email"
+              error={errors?.email ? true : false}
+              field={field}
+              message={errors?.email?.message || ''}
+            />
+          )}
+        />
       </div>
-      <div>
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-        </label>
+      <div className="mb-4">
+        <Controller
+          control={control}
+          name="password"
+          defaultValue=""
+          rules={{
+            required: 'This field is required',
+          }}
+          render={({ field }) => (
+            <Input
+              label="password"
+              placeholder="Please Enter your password"
+              type="password"
+              variant="static"
+              name="password"
+              error={errors?.password ? true : false}
+              field={field}
+              message={errors?.password?.message || ''}
+            />
+          )}
+        />
       </div>
-      <button type="submit">Submit</button>
-    </form>
-  );
-};
 
-export default Form;
+      <Button label="Submit Form" type="submit" />
+    </form>
+  )
+}
+
+export default Form

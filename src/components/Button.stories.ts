@@ -16,11 +16,11 @@ type Story = StoryObj<typeof Button>
 export const primary: Story = {
   args: {
     label: 'sdfdsf',
-    className: {
-      control: {
-        type: 'select',
-        options: ['', 'bg-red-500', 'bg-green-500', 'bg-yellow-500'],
-      },
-    },
+    // className: {
+    //   control: {
+    //     type: 'select',
+    //     options: ['', 'bg-red-500', 'bg-green-500', 'bg-yellow-500'],
+    //   },
+    // },
   },
 }
